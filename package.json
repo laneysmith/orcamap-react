@@ -24,7 +24,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}'",
-    "lint:fix": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint:fix": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "format": "prettier --config .prettierrc 'src/**/*.{js,ts,tsx}' --write"
   },
   "browserslist": {
     "production": [
@@ -60,7 +61,7 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix",
-      "prettier --write"
+      "yarn format"
     ]
   }
 }

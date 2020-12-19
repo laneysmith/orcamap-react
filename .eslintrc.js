@@ -8,6 +8,10 @@ module.exports = {
     'plugin:prettier/recommended',
     'prettier/react',
   ],
+  rules: {
+    'react/prop-types': 0,
+    '@typescript-eslint/no-explicit-any': 'off',
+  },
   plugins: ['react', '@typescript-eslint', 'prettier'],
   env: {
     browser: true,
@@ -16,15 +20,15 @@ module.exports = {
     jest: true,
     node: true,
   },
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
-    },
-    project: './tsconfig.json',
-    tsconfigRootDir: './',
-  },
+  // parserOptions: {
+  //   ecmaVersion: 2018,
+  //   sourceType: 'module',
+  //   ecmaFeatures: {
+  //     jsx: true,
+  //   },
+  //   project: './tsconfig.json',
+  //   tsconfigRootDir: './',
+  // },
   settings: {
     react: {
       pragma: 'React',

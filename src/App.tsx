@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { FC } from 'react'
 import Map from './Map'
-import Marker from './Marker'
+// import Marker from './Marker'
+import EventsLayer from './EventsLayer'
+import HydrophoneMarkers from './HydrophoneMarkers'
 
-const App: React.FC = () => {
+const App: FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <Map //eslint-disable-next-line
+        <Map
           style="mapbox://styles/mapbox/light-v9"
           containerStyle={{
             height: '100vh',
@@ -15,7 +17,9 @@ const App: React.FC = () => {
           zoom={[6.5]}
           center={[-123.35, 48.41]}
         >
-          <Marker />
+          {/* <Marker /> */}
+          <EventsLayer />
+          <HydrophoneMarkers />
         </Map>
       </header>
     </div>
