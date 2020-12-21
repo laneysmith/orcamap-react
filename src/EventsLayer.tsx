@@ -1,24 +1,24 @@
 import React, { FC, useEffect, useState, MouseEventHandler } from 'react'
 import config from './config'
-import { Layer, Feature, Image, Popup } from 'react-mapbox-gl'
+import { Layer, Feature, Image as AddImage, Popup } from 'react-mapbox-gl'
 import {
   GoogleSpreadsheet,
   GoogleSpreadsheetWorksheet,
   GoogleSpreadsheetRow,
 } from 'google-spreadsheet'
-// import { thingy } from './icons'
-// import microphone from './microphone.svg'
+import { microphone } from './icons'
+import svgAsImg from './utils/svgAsImg'
 
 const doc = new GoogleSpreadsheet(config.spreadsheetId)
 doc.useApiKey(config.apiKey)
 
-// const image: HTMLImageElement = new Image(20, 20)
-// image.src = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(thingy)
-// image.src = './images/microphone.svg'
-
+enum EventType {
+  VISUAL = 'visual',
+}
 interface EventDetail {
+  id: number
   user: string
-  type: string
+  type: EventType
   latitude: number
   longitude: number
   timestamp: number
@@ -26,6 +26,7 @@ interface EventDetail {
 
 const EventsLayer: FC = () => {
   const [events, setEvents] = useState<GoogleSpreadsheetRow[]>([])
+  // const [events, setEvents] = useState<any[]>([])
   const [focusedEvent, setFocusedEvent] = useState<EventDetail | null>(null)
 
   const onMouseEnter: MouseEventHandler<HTMLElement> = (event: any): void => {
@@ -41,6 +42,16 @@ const EventsLayer: FC = () => {
       await doc.loadInfo()
       const sheet: GoogleSpreadsheetWorksheet = doc.sheetsByIndex[0]
       const rows: GoogleSpreadsheetRow[] = await sheet.getRows()
+      // const rows = [
+      //   {
+      //     _rowNumber: 1,
+      //     user: 'someone',
+      //     type: EventType.VISUAL,
+      //     longitude: -122.4862825,
+      //     latitude: 47.51248061,
+      //     timestamp: 123456,
+      //   },
+      // ]
       setEvents(rows)
     }
     loadSpreadsheet()
@@ -62,24 +73,27 @@ const EventsLayer: FC = () => {
     )
   }
 
+  // const visualIcon = svgAsImg(microphone)
+
   return (
     <>
-      <Image
-        id="visual"
-        url="./images/binoculars.png"
+      {/* <AddImage
+        id={EventType.VISUAL}
+        src={visualIcon.src}
+        width={16}
+        height={16}
         // options={{ sdf: true }}
-        // width={16}
-        // height={16}
-      />
+      /> */}
       <Layer
         id="event-layer"
         type="symbol"
-        // the feature's 'type' will be mapped to an Image id
-        layout={{ 'icon-image': ['get', 'type'] }}
+        layout={{ 'icon-image': 'marker-15' }}
+        // layout={{ 'icon-image': ['get', 'type'] }}
+        // images={[EventType.VISUAL, visualIcon]}
       >
         {events.map((event) => {
           const {
-            _rowNumber,
+            _rowNumber: id,
             user,
             type,
             latitude,
@@ -88,9 +102,9 @@ const EventsLayer: FC = () => {
           } = event
           return (
             <Feature
-              key={_rowNumber}
+              key={id}
               coordinates={[longitude, latitude]}
-              properties={{ type, timestamp, longitude, latitude, user }}
+              properties={{ id, type, timestamp, longitude, latitude, user }}
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
             />
